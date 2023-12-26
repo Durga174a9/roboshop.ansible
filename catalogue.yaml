@@ -59,8 +59,13 @@
 
   - name: 'installing mongorepo client'
     ansible.builtin.package:
-      name: dnf install mongodb-org-shell
+      name: mongodb-org-shell
       state: present
+
+  - name: get the categories count
+    ansible.builtin.command:  mongo --host mongodb.daws76s.online --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+    register: product_count
+
 
   - name: 'conneting to mongo repo'
     ansible.biltin.command:
