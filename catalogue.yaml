@@ -4,12 +4,7 @@
   become: True
   tasks:
   - name: "Disabling default nodejs module"
-    ansible.builtin.command:
-      command: 'dnf module disable nodejs -y'
-    
-  - name: "Enabling nodejs 18 module"
-    ansible.builtin.command:
-      command: 'dnf module enable nodejs:18 -y'
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
 
   - name: "Installing nodejs package"
     ansible.builtin.package:
