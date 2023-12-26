@@ -68,7 +68,7 @@
 
 
   - name: 'conneting to mongo repo'
-    ansible.biltin.command:
+    ansible.builtin.command:
       command: 'mongo --host mongo.174a9.online </app/schema/catalogue.js'
     when: product_count.stdout == "0"
 
