@@ -1,6 +1,6 @@
 ---
 - name: 'installing catalogue using ansible'
-  hosts: localhost
+  hosts: catalogue
   become: True
   tasks:
   - name: "Disabling default nodejs module"
