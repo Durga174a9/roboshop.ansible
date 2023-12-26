@@ -1,0 +1,31 @@
+---
+- name: 'installing mongodb by ansible'
+  hosts: mondodb
+  become: yes
+  tasks:
+    - name: 'copying mongorepo'
+      ansible.builtin.copy:
+        src: mongorepo
+        dest: /etc/yum.repos.d/mongo.repo
+
+    - name: 'Installing mondodb'
+      ansible.builtin.package:
+        name: mongodb-org  
+        state: present      
+
+    - name: 'enabling and starting mongo service'
+      ansible.builtin.service:
+        name: mongod
+        state: started
+        enable: yes
+    
+    - name: "Allowing all server's to access the server"
+      ansible.builtin.replace:
+        path: /etc/mongod.conf
+        regexp: '127.0.0.1'
+        replace: '0.0.0.0'
+
+    - name: "restarting the mongo server"
+       ansible.builtin.service:
+        name: mongod
+        state: restarted

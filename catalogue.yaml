@@ -1,0 +1,74 @@
+---
+- name: 'installing catalogue using ansible'
+  hosts: localhost
+  become: True
+  tasks:
+  - name: "Disabling default nodejs module"
+    ansible.builtin.command:
+      command: 'dnf module disable nodejs -y'
+    
+  - name: "Enabling nodejs 18 module"
+    ansible.builtin.command:
+      command: 'dnf module enable nodejs:18 -y'
+
+  - name: "Installing nodejs package"
+    ansible.builtin.package:
+      name: 'nodejs'
+      state: present
+
+  - name: "Adding user roboshop"
+    ansible.builtin.user:
+      name: roboshop
+
+
+  - name: 'Creating app directory'
+    ansible.builtin.file:
+      path: /app
+      state: directory
+
+  - name: 'Down loading code '
+    ansible.builtin.get_url:
+      url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+      dest: /tmp
+
+  - name: Unzipping the code'
+    ansible.builtin.unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
+      remote_src: yes
+
+  - name: "Installing dependencies"
+    ansible.builtin.command:
+      command: npm install
+    args:
+      chdir: /app
+    
+  - name: 'copying the catalogue file'
+    ansible.builtin.copy:
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+
+  - name: 'Reloading-deamon'
+    ansible.builtin.systemd_service:
+      deamon_reload: True
+
+  - name: "copying mongorepo "
+    ansible.builtin.copy:
+      src: mongorepo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  - name: 'installing mongorepo client'
+    ansible.builtin.package:
+      name: dnf install mongodb-org-shell
+      state: present
+
+  - name: 'conneting to mongo repo'
+    ansible.biltin.command:
+      command: 'mongo --host mongo.174a9.online </app/schema/catalogue.js'
+    when: product_count.stdout == "0"
+
+  - name: start and enable catalogue
+    ansible.builtin.service:
+      name: catalogue
+      state: restarted
+      enabled: yes
