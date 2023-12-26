@@ -1,6 +1,6 @@
 ---
 - name: 'installing mongodb by ansible'
-  hosts: mondodb
+  hosts: mongo
   become: yes
   tasks:
     - name: 'copying mongorepo'
