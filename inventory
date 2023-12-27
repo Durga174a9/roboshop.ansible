@@ -6,5 +6,14 @@ mongodb.174a9.online
 [catalogue]
 catalogue.174a9.online
 
- [web]
+[web]
 web.174a9.online
+
+[cart]
+cart.174a9.online
+
+[A]
+redis.174a9.online
+
+[user]
+user.174a9.online

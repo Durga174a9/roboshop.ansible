@@ -1,6 +1,6 @@
 ---
 - name: Setting up redis application
-  hosts: redis
+  hosts: A
   become: True
   tasks:
   - name: installing redis repo
