@@ -1,0 +1,72 @@
+---
+- name: 'installing user using ansible'
+  hosts: user
+  become: True
+  tasks:
+  - name: "Disabling default nodejs module"
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
+
+  - name: installing nodejs
+    ansible.builtin.package:
+      name: nodejs
+      state: present
+  
+  - name: Adding user
+    ansible.builtin.user:
+      name: roboshop
+
+  - name: creating app directory
+    ansible.builtin.file:
+      path: /app
+      state: directory
+
+  - name: Downloading user code
+    ansible.builtin.get_url:
+      url: https://roboshop-builds.s3.amazonaws.com/user.zip
+      dest: /tmp
+    
+  - name: Unzipping the code
+    ansible.builtin.unarchive:
+      src: /tmp/user.zip
+      dest: /app
+      remote_src: True
+
+  - name: installing dependencies
+    ansible.builtin.command: npm install
+    args:
+      chdir: /app
+
+  - name: Copying user.service file
+    ansible.builtin.copy:
+      src: user.service
+      dest: /etc/systemd/system/user.service
+
+  - name: Re-loading deamon
+    ansible.builtin.systemd_service:
+      daemon_reload: True
+
+  - name: copying mongo repo
+    ansible.builtin.copy:
+      src: mongorepo
+      dest: /etc/yum.repos.d/mongodb.repo
+
+  - name: installing mongo-shell
+    ansible.builtin.package:
+      name: mongodb-org-shell
+      state: present
+
+  - name: get the users count
+    ansible.builtin.command:  mongo --host mongodb.daws76s.online --quiet --eval 'db = db.getSiblingDB("users"); db.users.count()'
+    register: user_count
+
+  - name: load user data
+    ansible.builtin.command: mongo --host mongodb.174a9.online < /app/schema/user.js
+    when: user_count.stdout == "0" # keep double quotes
+
+  - name: starting and enable user
+    ansible.builtin.service:
+      name: user
+      state: restarted
+      enabled: True
+  
+
