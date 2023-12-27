@@ -50,7 +50,7 @@
 
   - name: 'Reloading-deamon'
     ansible.builtin.systemd_service:
-      deamon_reload: True
+      daemon_reload: True
 
   - name: "copying mongorepo "
     ansible.builtin.copy:
