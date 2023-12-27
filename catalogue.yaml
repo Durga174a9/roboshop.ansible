@@ -68,8 +68,8 @@
 
 
   - name: 'conneting to mongo repo'
-    ansible.builtin.shell: 'mongo --host mongo.174a9.online </app/schema/catalogue.js'
-#      command: 'mongo --host mongo.174a9.online </app/schema/catalogue.js'
+    ansible.builtin.shell: 'mongo --host mongodb.174a9.online </app/schema/catalogue.js'
+#      command: 'mongo --host mongodb.174a9.online </app/schema/catalogue.js'
     when: product_count.stdout == "0"
 
   - name: start and enable catalogue
