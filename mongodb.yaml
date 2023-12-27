@@ -8,9 +8,9 @@
         src: mongorepo
         dest: /etc/yum.repos.d/mongo.repo
 
-    - name: 'Installing mondodb'
+    - name: Install mongodb
       ansible.builtin.package:
-        name: mongodb-org  
+        name: mongodb-org
         state: present      
 
     - name: 'enabling and starting mongo service'
