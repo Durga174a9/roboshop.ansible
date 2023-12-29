@@ -65,7 +65,7 @@
 
   - name: Enable service and staring user service
     ansible.builtin.service:
-      name: user
+      name: durga
       state: restarted
       enabled: yes
   
