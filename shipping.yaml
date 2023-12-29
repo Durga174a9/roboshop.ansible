@@ -51,7 +51,7 @@
 
   - name: installing mysql-client
     ansible.builtin.package:
-      name:mysql
+      name: mysql
       state: present
 
   - name: loading data into sql
