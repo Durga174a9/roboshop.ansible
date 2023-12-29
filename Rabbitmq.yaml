@@ -1,0 +1,29 @@
+---
+- name: Setting up rabbitmq
+  hosts: rabbitmq
+  become: True
+  tasks:
+  - name: Configuring yum repo
+    ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/rabbitmq/erlang/script.rpm.sh | bash
+
+  - name: configuring yum repo for rabbitmq
+    ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
+
+  - name: installing rabbitmq
+    ansible.builtin.package:
+      name: rabbitmq-server
+      state: present
+
+  - name: staring and enabling rabbitmq
+    ansibel.builtin.service:
+      name: rabbitmq-server
+      state: restarted
+      enabled: yes
+
+  - name: adding rabbitmq user
+    ansible.builtin.shell: rabbitmqctl add_user roboshop roboshop123
+
+  - name: setting permissions
+    ansible.builtin.shell: rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+
+    
