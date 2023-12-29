@@ -29,8 +29,9 @@
     ansible.builtin.unarchive:
       src: /tmp/payment.zip
       dest: /app
+      remote_src: yes
 
-  - name: insatlling dependencies
+  - name: installing dependencies
     ansible.builtin.command: pip3.6 install -r requirements.txt
     args:
       chdir: /app
