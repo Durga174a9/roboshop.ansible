@@ -17,3 +17,15 @@ redis.174a9.online
 
 [user]
 user.174a9.online
+
+[mysql]
+mysql.174a9.online
+
+[payment]
+payment.174a9.online
+
+[rabbitmq]
+rabbitmq.174a9.online
+
+[shipping]
+shipping.174a9.online
