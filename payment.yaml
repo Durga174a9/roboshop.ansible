@@ -23,7 +23,7 @@
   - name: downloading payment code
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/payment.zip
-      path: /tmp
+      dest: /tmp
 
   - name: unziping code
     ansible.builtin.unarchive:
@@ -49,4 +49,3 @@
       name: payment
       state: restarted
       enabled: yes
-      
